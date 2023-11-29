@@ -1,0 +1,3 @@
+include ':wifiService'
+include ':app'
+rootProject.name = "WifiServiceDemo"
