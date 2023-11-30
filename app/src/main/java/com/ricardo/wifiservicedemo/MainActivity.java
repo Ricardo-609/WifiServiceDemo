@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "[MainActivity]";
     private IWifiService mService;
 
-//    private Handler mHandler;
+
     
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -46,25 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WifiService.class);
         bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
-//        startSubThread();
     }
 
-//    private void startSubThread() {
-//        mHandler = new Handler(Looper.getMainLooper());
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                try {
-//                    if (mService != null) mService.openSta();
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // 每隔300毫秒再次调用自身，实现定时任务
-//                mHandler.postDelayed(this, 300);
-//            }
-//        }, 0);
-//    }
+
 
 }
