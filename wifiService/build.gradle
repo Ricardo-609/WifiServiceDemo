@@ -39,4 +39,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     compileOnly 'hsae.25mda:carlib:DEV-SNAPSHOT'
+
+    implementation files('libs/classes.jar')
 }

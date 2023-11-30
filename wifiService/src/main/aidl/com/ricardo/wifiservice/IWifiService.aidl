@@ -12,4 +12,18 @@ interface IWifiService {
             double aDouble, String aString);
 
     int openSta();
+    int closeSta();
+    int scan();
+    List<ScanResult> scan_results();
+    int getStaStatus();
+    int setStaSSID();
+    String setStaPasswor(String password);
+    int connect();
+    int disConnect();
+    int getApStatus();
+    int openAp();
+    int closeAp();
+    List<String> getApConnectInfo();
+    int disConnectAp(String ssid);
+    int setApPassward(String password);
 }
