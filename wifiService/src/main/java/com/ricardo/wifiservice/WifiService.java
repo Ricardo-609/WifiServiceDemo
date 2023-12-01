@@ -18,9 +18,6 @@ public class WifiService extends Service {
     private final String TAG = "[WifiServcie]";
     private IWifi mWifi = null;
 
-    // sta和ap不同同时打开，默认为false，一旦开启一个，设置为true
-    private boolean conflict = false;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,6 +41,11 @@ public class WifiService extends Service {
         }
 
         @Override
+        public Scan_Result get() throws RemoteException {
+            return new Scan_Result("1", "2", "3", "4", "5");
+        }
+
+        @Override
         public int setStaSSID(String ssid) throws RemoteException {
             Log.d(TAG, "Setting SSID.");
             //  ssid格式判断 ？？
@@ -57,6 +59,7 @@ public class WifiService extends Service {
             List<Scan_Result> tmp = new ArrayList<>();
             // ScanResutl为hidl服务传过来的数据类型
             List<ScanResult> ret = mWifi.scan_results();
+
             Log.d(TAG, "scan_results." + " --> " + ret.size());
 
             Log.d(TAG, ret.toString());
@@ -69,16 +72,13 @@ public class WifiService extends Service {
 
         @Override
         public int openSta() throws RemoteException {
-            if (conflict)  return 1;
             Log.d(TAG, "opening Station.");
-            conflict = true;
             return mWifi.openSTA();
         }
 
         @Override
         public int closeSta() throws RemoteException {
             Log.d(TAG, "close station.");
-            conflict = false;
             return mWifi.closeSTA();
         }
 
@@ -125,16 +125,13 @@ public class WifiService extends Service {
 
         @Override
         public int openAp() throws RemoteException {
-            if (conflict)  return 1;
             mWifi.openAP();
-            conflict = true;
             return 0;
         }
 
         @Override
         public int closeAp() throws RemoteException {
             mWifi.closeAP();
-            conflict = false;
             return 0;
         }
 

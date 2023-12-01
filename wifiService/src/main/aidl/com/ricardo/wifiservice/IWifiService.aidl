@@ -28,4 +28,7 @@ interface IWifiService {
     List<String> getApConnectInfo();
     int disConnectAp(String ssid);
     int setApPassward(String password);
+
+    // test Scan_Result
+    Scan_Result get();
 }

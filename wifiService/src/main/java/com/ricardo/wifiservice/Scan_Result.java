@@ -41,6 +41,17 @@ public class Scan_Result implements Parcelable {
     };
 
     @Override
+    public String toString() {
+        return "Scan_Result{" +
+                "bssid='" + bssid + '\'' +
+                ", frequency='" + frequency + '\'' +
+                ", level='" + level + '\'' +
+                ", flag='" + flag + '\'' +
+                ", ssid='" + ssid + '\'' +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
