@@ -1,6 +1,7 @@
-// ScanResult.aidl
+// Scan_Result.aidl
 package com.ricardo.wifiservice;
 
 // Declare any non-default types here with import statements
+import com.ricardo.wifiservice.Scan_Result;
 
-parcelable ScanResult;
+parcelable Scan_Result;

@@ -2,6 +2,7 @@
 package com.ricardo.wifiservice;
 
 // Declare any non-default types here with import statements
+import com.ricardo.wifiservice.Scan_Result;
 
 interface IWifiService {
     /**
@@ -14,12 +15,13 @@ interface IWifiService {
     int openSta();
     int closeSta();
     int scan();
-    List<ScanResult> scan_results();
+    List<Scan_Result> scan_results();
     int getStaStatus();
-    int setStaSSID();
-    String setStaPasswor(String password);
+    int setStaSSID(String ssid);
+    String setStaPassword(String password);
     int connect();
     int disConnect();
+
     int getApStatus();
     int openAp();
     int closeAp();

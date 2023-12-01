@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     // 使用系统签名
     id 'hsae.25mda.plugin.signing'
+    id 'hsae.25mda.plugin.framework'
 }
 
 android {
@@ -30,6 +31,11 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -39,6 +45,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     compileOnly 'hsae.25mda:carlib:DEV-SNAPSHOT'
+    compileOnly 'hsae.25mda:framework:DEV-SNAPSHOT'
+    compileOnly 'hsae.25mda:comlibs:DEV-SNAPSHOT'
 
     implementation files('libs/classes.jar')
+//    compileOnly files('libs/classes.jar')
 }

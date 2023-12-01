@@ -27,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Service connected.");
             try {
                 mService.openSta();
+                mService.getStaStatus();
+                mService.scan();
+                mService.scan_results();
+                mService.setStaSSID("Z1");
+                mService.setStaPassword("12345678");
+                mService.getStaStatus();
+                mService.closeSta();
             } catch(RemoteException e) {
                 e.printStackTrace();
             }

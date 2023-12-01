@@ -2,6 +2,7 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
         maven {
             url "http://47.106.116.211:8081/repository/maven-public/"
 
@@ -18,6 +19,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         maven {
             url "http://47.106.116.211:8081/repository/maven-public/"
 
