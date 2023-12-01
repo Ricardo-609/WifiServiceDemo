@@ -54,21 +54,35 @@ public class WifiService extends Service {
             List<Scan_Result> tmp = new ArrayList<>();
             // ScanResutl为hidl服务传过来的数据类型
             List<ScanResult> ret = mWifi.scan_results();
+//            Log.d(TAG, "=========================");
+//            Log.d(TAG, "scan_results" + " --> " + ret.size());
 
-            Log.d(TAG, "scan_results." + " --> " + ret.size());
-
-            Log.d(TAG, ret.toString());
-//            for (ScanResult scanResult : ret) {
+//            Log.d(TAG, ret.toString());
+            for (ScanResult scanResult : ret) {
 //                Log.d(TAG, scanResult.toString());
-//                tmp.add(scanResult.toString());
-//            }
-            return null;
+                Scan_Result scan_result = new Scan_Result();
+                scan_result.setBssid(scanResult.bssid);
+                scan_result.setFrequency(scanResult.frequency);
+                scan_result.setFlag(scanResult.flags);
+                scan_result.setLevel(scanResult.level);
+                scan_result.setSsid(scanResult.ssid);
+                tmp.add(scan_result);
+            }
+            return tmp;
         }
 
         @Override
         public int openSta() throws RemoteException {
             Log.d(TAG, "opening Station.");
-            return mWifi.openSTA();
+            mWifi.openSTA();
+            mWifi.scan();
+            try {
+                Thread.currentThread ().sleep (1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//            mWifi.scan_results();
+            return 0;
         }
 
         @Override

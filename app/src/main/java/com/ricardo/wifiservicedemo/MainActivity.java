@@ -14,13 +14,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ricardo.wifiservice.IWifiService;
+import com.ricardo.wifiservice.Scan_Result;
 import com.ricardo.wifiservice.WifiService;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "[MainActivity]";
     private IWifiService mService;
 
-
+    private List<Scan_Result> ret;
     
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -30,14 +33,16 @@ public class MainActivity extends AppCompatActivity {
             try {
                 mService.openSta();
                 mService.getStaStatus();
-                mService.scan();
-                mService.scan_results();
+//                mService.scan();
+                ret = mService.scan_results();
+                Log.d(TAG, ret.toString());
+
 //                mService.setStaSSID("Z1");
 //                mService.setStaPassword("12345678");
                 mService.getStaStatus();
                 mService.closeSta();
 
-                Log.d(TAG, mService.get().toString());
+//                Log.d(TAG, mService.get().toString());
 
             } catch(RemoteException e) {
                 e.printStackTrace();
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     Log.d(TAG, String.valueOf(mService.getStaStatus()));
+                    textView.setText(ret.toString());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
