@@ -35,10 +35,6 @@ public class WifiService extends Service {
     }
 
     private IWifiService.Stub mBinder = new IWifiService.Stub() {
-        @Override
-        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
-
-        }
 
         @Override
         public Scan_Result get() throws RemoteException {
@@ -52,7 +48,6 @@ public class WifiService extends Service {
             mWifi.setSTASSID(ssid);
             return 0;
         }
-
 
         @Override
         public List<Scan_Result> scan_results() throws RemoteException {
@@ -88,15 +83,11 @@ public class WifiService extends Service {
             return mWifi.scan();
         }
 
-
-
         @Override
         public int getStaStatus() throws RemoteException {
             Log.d(TAG, "get Station status.");
             return mWifi.getSTAStatus();
         }
-
-
 
         @Override
         public String setStaPassword(String password) throws RemoteException {
@@ -152,7 +143,5 @@ public class WifiService extends Service {
             mWifi.setAPPassword(password);
             return 0;
         }
-
-
     };
 }
