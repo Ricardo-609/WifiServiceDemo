@@ -18,6 +18,7 @@ import com.ricardo.wifiservice.Scan_Result;
 import com.ricardo.wifiservice.WifiService;
 
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "[MainActivity]";
@@ -35,12 +36,19 @@ public class MainActivity extends AppCompatActivity {
                 mService.getStaStatus();
 //                mService.scan();
                 ret = mService.scan_results();
-                Log.d(TAG, ret.toString());
+//                Log.d(TAG, ret.toString());
 
-//                mService.setStaSSID("Z1");
-//                mService.setStaPassword("12345678");
+                mService.setStaSSID("Redmi K60");
+                mService.setStaPassword("12345678");
+                mService.connect();
+                try {
+                    Thread.currentThread ().sleep (1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mService.getStaStatus();
-                mService.closeSta();
+//                mService.disConnect();
+//                mService.closeSta();
 
 //                Log.d(TAG, mService.get().toString());
 
@@ -69,7 +77,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     Log.d(TAG, String.valueOf(mService.getStaStatus()));
-                    textView.setText(ret.toString());
+                    Random random = new Random();
+                    int t = random.nextInt(ret.size());
+                    textView.setText(ret.get(t).getSsid() + "----->" + ret.get(t).getLevel());
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
