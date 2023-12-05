@@ -1,6 +1,7 @@
 package com.ricardo.wifiservice;
 
 import android.os.RemoteException;
+import android.util.Log;
 
 import java.util.List;
 
@@ -12,8 +13,8 @@ import com.ricardo.wifiservice.base.LRUCache;
 public class WifiStation {
     private static final String TAG = "[WifiStation]";
 
-    private LRUCache<ScanResult, String> cache = new LRUCache<>();     // 最多记录8个已连接的设备
-    private ScanResult current = null;
+    private LRUCache<String, String> cache = new LRUCache<>();     // 最多记录8个已连接的设备
+    private String current = null;
 
 //    IWifi mWifi = IWifi.getService();
     IWifi mWifi;
@@ -23,9 +24,10 @@ public class WifiStation {
     }
 
     public boolean openStation() {
+        Log.d(TAG, "Openning Station.");
+
         int ret = -1;
         try {
-            if (mWifi.getSTAStatus() == 0)  return true;        // 避免多次打开
             ret = mWifi.openSTA();
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -34,9 +36,10 @@ public class WifiStation {
     }
 
     public boolean closeStation() {
+        Log.d(TAG, "Close Station.");
+
         int ret = -1;
         try {
-            if (mWifi.getSTAStatus() != 0) return true;
             ret = mWifi.closeSTA();
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -45,8 +48,9 @@ public class WifiStation {
     }
 
     public List<ScanResult> search() {
+        Log.d(TAG, "Scanning.");
+
         try {
-            if (mWifi.getSTAStatus() != 0) return null;
             int ret = mWifi.scan();
             if (ret != 0) return null;
         } catch (RemoteException e) {
@@ -67,17 +71,17 @@ public class WifiStation {
         return null;
     }
 
-    public boolean linkWifi(ScanResult scanResult, String passwd) {
+    public boolean linkWifi(String ssid, String passwd) {
         int ret = -1;
         try {
-            if (mWifi.getSTAStatus() != 0)  return false;
-            cache.get(scanResult);                  // 连接之前先查询是否连接过
-            mWifi.setSTASSID(scanResult.ssid);
+            // 连接之前先查询是否连接过
+            cache.get(ssid);
+            mWifi.setSTASSID(ssid);
             mWifi.setSTAPassWord(passwd);
             ret = mWifi.connect();
-            current = scanResult;
+            current = ssid;
             // 每连接一个wiif就记录一个，若超过8个，则删除一个
-            cache.put(scanResult, passwd);
+            cache.put(ssid, passwd);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -97,13 +101,13 @@ public class WifiStation {
         return false;
     }
 
-    public ScanResult getCurrentStatus() {
+    public String getCurrentStatus() {
         return current;
     }
 
-    public boolean deleteDevice(ScanResult scanResult) {
-        if (cache.get(scanResult) != null) {
-            cache.remove(scanResult);
+    public boolean deleteDevice(String ssid) {
+        if (cache.get(ssid) != null) {
+            cache.remove(ssid);
             return true;
         }
         return false;

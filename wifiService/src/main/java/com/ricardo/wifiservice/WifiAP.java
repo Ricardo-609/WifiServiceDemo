@@ -19,12 +19,7 @@ public class WifiAP {
     public boolean openAP() {
         int ret = -1;
         try {
-            if (mWifi.getAPStatus() == 0)  return true;        // 避免多次打开
-            try {
-                ret = mWifi.openAP();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            ret = mWifi.openAP();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -34,7 +29,6 @@ public class WifiAP {
     public boolean closeAP() {
         int ret = -1;
         try {
-            if (mWifi.getAPStatus() != 0) return true;
             ret = mWifi.closeAP();
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -51,12 +45,14 @@ public class WifiAP {
         return null;
     }
 
-    public void disConnectedDevice(String ssid) {
+    public boolean disConnectedDevice(String ssid) {
+        int ret = -1;
         try {
-            mWifi.disconnectAP(ssid);
+            ret = mWifi.disconnectAP(ssid);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        return ret == 0;
     }
 
     public int getAPstatus() {

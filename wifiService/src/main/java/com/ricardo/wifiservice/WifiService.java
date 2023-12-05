@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -23,6 +24,7 @@ public class WifiService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "onCreate.");
 
         try {
             mWifi =IWifi.getService();
@@ -60,7 +62,6 @@ public class WifiService extends Service {
         public List<Scan_Result> search() throws RemoteException {
             List<Scan_Result> tmp = new ArrayList<>();
             List<ScanResult> ret = mWifiStation.search();
-
             for (ScanResult scanResult : ret) {
                 Scan_Result scan_result = new Scan_Result();
                 scan_result.setBssid(scanResult.bssid);
@@ -74,23 +75,53 @@ public class WifiService extends Service {
         }
 
         @Override
-        public boolean linkWifi(Scan_Result scanResult, String passwd) throws RemoteException {
-            return false;
+        public boolean linkWifi(String ssid, String passwd) throws RemoteException {
+            return mWifiStation.linkWifi(ssid, passwd);
         }
 
         @Override
         public boolean disLinkWifi() throws RemoteException {
-            return false;
+            return mWifiStation.disLinkWifi();
         }
 
         @Override
-        public Scan_Result getCurrentStatus() throws RemoteException {
-            return null;
+        public String getCurrentStatus() throws RemoteException {
+            return mWifiStation.getCurrentStatus();
         }
 
         @Override
-        public boolean deleteDevice(Scan_Result scanResult) throws RemoteException {
-            return false;
+        public boolean deleteDevice(String ssid) throws RemoteException {
+            return mWifiStation.deleteDevice(ssid);
+        }
+
+        @Override
+        public boolean openAP() throws RemoteException {
+            return mWifiAP.openAP();
+        }
+
+        @Override
+        public boolean closeAP() throws RemoteException {
+            return mWifiAP.closeAP();
+        }
+
+        @Override
+        public List<String> connectedDeviceInfo() throws RemoteException {
+            return mWifiAP.connectedDeviceInfo();
+        }
+
+        @Override
+        public boolean disConnectedDevice(String ssid) throws RemoteException {
+            return mWifiAP.disConnectedDevice(ssid);
+        }
+
+        @Override
+        public int getAPstatus() throws RemoteException {
+            return mWifiAP.getAPstatus();
+        }
+
+        @Override
+        public void createConfiguration(String ssid, String passwd) throws RemoteException {
+            mWifiAP.createConfiguration(ssid, passwd);
         }
     };
 }

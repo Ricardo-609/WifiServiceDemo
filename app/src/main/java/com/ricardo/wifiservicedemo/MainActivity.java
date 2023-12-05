@@ -40,12 +40,6 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = IWifiService.Stub.asInterface(service);
             Log.d(TAG, "Service connected.");
-            try {
-                mService.openStation();
-                ret = mService.search();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
@@ -68,11 +62,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                     textView.setVisibility(View.GONE);
 
-                    mRecyclerView = findViewById(R.id.recyclerview);
-                    mMyAdapter = new MyAdapter();
-                    mRecyclerView.setAdapter(mMyAdapter);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                    mRecyclerView.setLayoutManager(layoutManager);
+                try {
+                    mService.openStation();
+                    ret = mService.search();
+
+
+//                    Log.d(TAG, "========================");
+//                    boolean status = mService.linkWifi("Redmi K60", "12345678");
+//                    Log.d(TAG, "=========" + status + "=============");
+//                  Log.d(TAG, ret.toString());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+                mRecyclerView = findViewById(R.id.recyclerview);
+                mMyAdapter = new MyAdapter();
+                mRecyclerView.setAdapter(mMyAdapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                mRecyclerView.setLayoutManager(layoutManager);
             }
         });
 
