@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -18,11 +17,17 @@ public class WifiService extends Service {
     private final String TAG = "[WifiServcie]";
     private IWifi mWifi = null;
 
+    private WifiStation mWifiStation = null;
+    private WifiAP mWifiAP = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        try { mWifi =IWifi.getService();
+        try {
+            mWifi =IWifi.getService();
+            mWifiStation = new WifiStation(mWifi);
+            mWifiAP = new WifiAP(mWifi);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -42,24 +47,21 @@ public class WifiService extends Service {
         }
 
         @Override
-        public int setStaSSID(String ssid) throws RemoteException {
-            Log.d(TAG, "Setting SSID.");
-            //  ssid格式判断 ？？
-            mWifi.setSTASSID(ssid);
-            return 0;
+        public boolean openStation() throws RemoteException {
+            return mWifiStation.openStation();
         }
 
         @Override
-        public List<Scan_Result> scan_results() throws RemoteException {
-            List<Scan_Result> tmp = new ArrayList<>();
-            // ScanResutl为hidl服务传过来的数据类型
-            List<ScanResult> ret = mWifi.scan_results();
-//            Log.d(TAG, "=========================");
-//            Log.d(TAG, "scan_results" + " --> " + ret.size());
+        public boolean closeStation() throws RemoteException {
+            return mWifiStation.closeStation();
+        }
 
-//            Log.d(TAG, ret.toString());
+        @Override
+        public List<Scan_Result> search() throws RemoteException {
+            List<Scan_Result> tmp = new ArrayList<>();
+            List<ScanResult> ret = mWifiStation.search();
+
             for (ScanResult scanResult : ret) {
-//                Log.d(TAG, scanResult.toString());
                 Scan_Result scan_result = new Scan_Result();
                 scan_result.setBssid(scanResult.bssid);
                 scan_result.setFrequency(scanResult.frequency);
@@ -72,90 +74,23 @@ public class WifiService extends Service {
         }
 
         @Override
-        public int openSta() throws RemoteException {
-            Log.d(TAG, "opening Station.");
-            mWifi.openSTA();
-            mWifi.scan();
-            try {
-                Thread.currentThread ().sleep (1000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-//            mWifi.scan_results();
-            return 0;
+        public boolean linkWifi(Scan_Result scanResult, String passwd) throws RemoteException {
+            return false;
         }
 
         @Override
-        public int closeSta() throws RemoteException {
-            Log.d(TAG, "close station.");
-            return mWifi.closeSTA();
+        public boolean disLinkWifi() throws RemoteException {
+            return false;
         }
 
         @Override
-        public int scan() throws RemoteException {
-            Log.d(TAG, "scanning.");
-            return mWifi.scan();
-        }
-
-        @Override
-        public int getStaStatus() throws RemoteException {
-            Log.d(TAG, "get Station status.");
-            return mWifi.getSTAStatus();
-        }
-
-        @Override
-        public String setStaPassword(String password) throws RemoteException {
-            Log.d(TAG, "Setting password.");
-            mWifi.setSTAPassWord(password);
+        public Scan_Result getCurrentStatus() throws RemoteException {
             return null;
         }
 
         @Override
-        public int connect() throws RemoteException {
-            Log.d(TAG, "connecting.");
-            return mWifi.connect();
-        }
-
-        @Override
-        public int disConnect() throws RemoteException {
-            Log.d(TAG, "disConnecting.");
-            return mWifi.disconnect();
-        }
-
-        @Override
-        public int getApStatus() throws RemoteException {
-            Log.d(TAG, "Get Ap Status.");
-            return mWifi.getAPStatus();
-        }
-
-        @Override
-        public int openAp() throws RemoteException {
-            mWifi.openAP();
-            return 0;
-        }
-
-        @Override
-        public int closeAp() throws RemoteException {
-            mWifi.closeAP();
-            return 0;
-        }
-
-        @Override
-        public List<String> getApConnectInfo() throws RemoteException {
-            mWifi.getAPConnectInfo();
-            return null;
-        }
-
-        @Override
-        public int disConnectAp(String ssid) throws RemoteException {
-            mWifi.disconnectAP(ssid);
-            return 0;
-        }
-
-        @Override
-        public int setApPassward(String password) throws RemoteException {
-            mWifi.setAPPassword(password);
-            return 0;
+        public boolean deleteDevice(Scan_Result scanResult) throws RemoteException {
+            return false;
         }
     };
 }

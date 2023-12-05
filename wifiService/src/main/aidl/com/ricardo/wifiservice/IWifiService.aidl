@@ -10,23 +10,6 @@ interface IWifiService {
      * and return values in AIDL.
      */
 
-//    int openSta();
-//    int closeSta();
-//    int scan();
-//    List<Scan_Result> scan_results();
-//    int getStaStatus();
-//    int setStaSSID(String ssid);
-//    String setStaPassword(String password);
-//    int connect();
-//    int disConnect();
-//
-//    int getApStatus();
-//    int openAp();
-//    int closeAp();
-//    List<String> getApConnectInfo();
-//    int disConnectAp(String ssid);
-//    int setApPassward(String password);
-
     boolean openStation();
     boolean closeStation();
     List<Scan_Result> search();

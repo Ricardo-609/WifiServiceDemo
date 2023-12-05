@@ -41,27 +41,9 @@ public class MainActivity extends AppCompatActivity {
             mService = IWifiService.Stub.asInterface(service);
             Log.d(TAG, "Service connected.");
             try {
-                mService.openSta();
-                mService.getStaStatus();
-//                mService.scan();
-                ret = mService.scan_results();
-//                Log.d(TAG, ret.toString());
-
-                mService.setStaSSID("Redmi K60");
-                mService.setStaPassword("12345678");
-                mService.connect();
-                try {
-                    Thread.currentThread ().sleep (1000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mService.getStaStatus();
-//                mService.disConnect();
-//                mService.closeSta();
-
-//                Log.d(TAG, mService.get().toString());
-
-            } catch(RemoteException e) {
+                mService.openStation();
+                ret = mService.search();
+            } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
@@ -84,11 +66,6 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Log.d(TAG, String.valueOf(mService.getStaStatus()));
-//                    Random random = new Random();
-//                    int t = random.nextInt(ret.size());
-//                    textView.setText(ret.get(t).getSsid() + "----->" + ret.get(t).getLevel());
                     textView.setVisibility(View.GONE);
 
                     mRecyclerView = findViewById(R.id.recyclerview);
@@ -96,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     mRecyclerView.setAdapter(mMyAdapter);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
                     mRecyclerView.setLayoutManager(layoutManager);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
